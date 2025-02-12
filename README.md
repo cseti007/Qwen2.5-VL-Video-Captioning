@@ -15,8 +15,8 @@ This project uses the Qwen2.5-VL model to generate detailed captions for videos.
 
 ```bash
 # Clone the repository
-git clone [your-repo-url]
-cd [repo-name]
+git clone https://github.com/cseti007/Qwen2.5-VL-Video-Captioning
+cd Qwen2.5-VL-Video-Captioning
 
 # Create a virtual environment
 python -m venv venv
