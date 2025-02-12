@@ -44,7 +44,7 @@ pip install accelerate
 
 ## Configuration
 
-The configuration is defined in the `DEFAULT_CONFIG` dictionary within the `Qwen2.5-vl-captioner3.py` file. You'll need to modify this section directly in the code to customize the behavior of the video captioning system.
+The configuration is defined in the `DEFAULT_CONFIG` dictionary within the `Qwen2.5-vl-captioner.py` file. You'll need to modify this section directly in the code to customize the behavior of the video captioning system.
 
 ### Configuration Parameters
 
@@ -110,7 +110,7 @@ Personally, I haven't tested adjusting these parameters, so I can't guarantee th
 
 ### Example Configuration Modification
 
-To modify the configuration, open `Qwen2.5-vl-captioner3.py` and locate the `DEFAULT_CONFIG` dictionary. Here's an example of how to modify it:
+To modify the configuration, open `Qwen2.5-vl-captioner.py` and locate the `DEFAULT_CONFIG` dictionary. Here's an example of how to modify it:
 
 ```python
 DEFAULT_CONFIG = {
@@ -141,7 +141,34 @@ DEFAULT_CONFIG = {
     }
 }
 ```
+## How to Run
 
+1. Prepare Your Environment
+```
+# Activate your virtual environment first
+# On Windows:
+venv\Scripts\activate
+# On Linux/Mac:
+source venv/bin/activate
+```
+2. Configure Settings
+Open Qwen2.5-vl-captioner.py and modify the DEFAULT_CONFIG dictionary:
+```
+DEFAULT_CONFIG = {
+    "process": {
+        "input_path": "/path/to/your/videos",  # Input video or directory
+        "output_dir": "/path/to/output",       # Output directory
+        "output_format": "csv",                # "csv" or "individual"
+        "fps": 8.0                            # Adjust if needed
+    },
+    # ... other configurations
+}
+```
+3. Run the Script
+```
+python Qwen2.5-vl-captioner.py
+
+```
 ## Supported Video Formats
 
 - .mp4
