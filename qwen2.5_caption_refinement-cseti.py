@@ -7,8 +7,8 @@ from typing import Optional
 @dataclass
 class Config:
     # File paths
-    INPUT_CSV: str = "/home/cseti/Data/Datasets/videos/Arcane/Cut_Original/best_of/jinx/33x16x1360x768/training/test/1/video_captions.csv"
-    OUTPUT_CSV: str = "/home/cseti/Data/Datasets/videos/Arcane/Cut_Original/best_of/jinx/33x16x1360x768/training/test/1/video_captions_refined.csv"
+    INPUT_CSV: str = "/path/to/input_csv/video_captions.csv"
+    OUTPUT_CSV: str = "/path/to/output_csv/video_captions_refined.csv"
     
     # Column names
     INPUT_COLUMN: str = "caption"
