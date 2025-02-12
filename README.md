@@ -66,7 +66,6 @@ source venv/bin/activate
 
 # Clone Qwen2.5-VL repository
 git clone https://github.com/QwenLM/Qwen2.5-VL
-cd Qwen2.5-VL
 ```
 
 2. Install the required packages:
