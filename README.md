@@ -39,10 +39,11 @@ pip install git+https://github.com/huggingface/transformers accelerate
 
 ```bash
 # Install PyTorch with CUDA support (adjust cuda version as needed)
-pip install torch torchvision --extra-index-url https://download.pytorch.org/whl/cu118
+pip install torch torchvision
 
 # Install other dependencies
 pip install bitsandbytes
+pip install flash-attn --no-build-isolation
 ```
 
 ## Configuration
