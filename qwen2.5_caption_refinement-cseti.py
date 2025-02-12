@@ -32,7 +32,7 @@ SYSTEM_PROMPT = """You are an AI prompt engineer tasked with helping me modifyin
 
 Keep the original text but only do the following modifications:
 - you responses should just be the prompt
-- Always start each prompt with "Dustify disintegration effect."
+- Always start each prompt with "MYTRAININGTRIGGERWORD"
 - Write continuously, don't use multiple paragraphs, make the text form one coherent whole
 - do not mention your task or the text itself
 - Don't refer to characters as 'characters' and 'persons', instead always use their gender or refer to them with their gender
