@@ -30,7 +30,9 @@ source venv/bin/activate
 # Clone Qwen2.5-VL repository
 git clone https://github.com/QwenLM/Qwen2.5-VL
 cd Qwen2.5-VL
-pip install -r requirements.txt
+pip install qwen-vl-utils[decord]==0.0.8
+pip install torch transformers opencv-python tqdm
+pip install git+https://github.com/huggingface/transformers accelerate
 ```
 
 2. Install the required packages:
@@ -40,11 +42,7 @@ pip install -r requirements.txt
 pip install torch torchvision --extra-index-url https://download.pytorch.org/whl/cu118
 
 # Install other dependencies
-pip install transformers
-pip install opencv-python
-pip install tqdm
 pip install bitsandbytes
-pip install accelerate
 ```
 
 ## Configuration
