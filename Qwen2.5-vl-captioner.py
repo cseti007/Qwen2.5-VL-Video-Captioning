@@ -165,8 +165,8 @@ Please be extremely specific and detailed in your description. If you notice any
                                         # 8.0 is a good balance between detail and performance
                                         # Formula: frames_extracted = video_length_seconds * fps
                                         # E.g.: 10 second video at 8 fps = 80 frames
-        "input_path": "/home/cseti/Data/Datasets/videos/Arcane/Cut_Original/best_of/jinx/33x16x1360x768/training/test/1",
-        "output_dir": "/home/cseti/Data/Datasets/videos/Arcane/Cut_Original/best_of/jinx/33x16x1360x768/training/test/1",
+        "input_path": "/path/to/videos_dir",
+        "output_dir": "/path/to/output_dir",
         "output_format": "csv",         # Output format for captions
                                         # Options: 
                                         # - "csv": Saves all captions in a single CSV file
