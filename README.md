@@ -1,5 +1,20 @@
 Please note that I'm not a developer. I made these scripts with the help of LLMs so please forgive me if I cannot help you with all of your technical problems.
 
+This repository contains two scripts that work together to generate and refine video captions using the Qwen2.5 model family:
+
+**1. Video Captioning Script (Qwen2.5-vl-captioner.py):**
+
+- Uses the Qwen2.5-VL (Vision-Language) model to generate detailed captions from video content
+- Extracts frames at configurable rates for analysis
+- Outputs captions in either CSV format or individual text files
+
+**2. Caption Refinement Script (qwen2.5_caption_refinement.py):**
+
+- Takes the output from the video captioning script and refines the generated captions
+- Uses the Qwen2.5-7B-Instruct model to improve caption quality
+- Processes CSV files in batches with progress saving
+
+
 # Table of Contents
 
 - [Qwen2.5-VL Video Captioning](#qwen25-vl-video-captioning)
