@@ -55,7 +55,7 @@ cd Qwen2.5-VL
 
 ```bash
 pip install qwen-vl-utils[decord]==0.0.8
-pip install torch transformers opencv-python tqdm
+pip install opencv-python tqdm
 pip install git+https://github.com/huggingface/transformers accelerate
 
 # Install PyTorch with CUDA support (adjust cuda version as needed)
