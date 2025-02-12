@@ -173,7 +173,7 @@ Please be extremely specific and detailed in your description. If you notice any
                                         # - "individual": Creates separate .txt files for each caption
                                         #                 using video filename (e.g., video1.mp4 -> video1.txt)
         "output_file": "video_captions.csv",
-        "csv_delimiter": "|"
+        "csv_delimiter": ","
     },
     "video": {
         # Frame extraction parameters
