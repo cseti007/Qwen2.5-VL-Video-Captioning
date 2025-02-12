@@ -1,5 +1,23 @@
 Please note that I'm not a developer. I made these scripts with the help of LLMs so please forgive me if I cannot help you with all of your technical problems.
 
+# Table of Contents
+
+- [Qwen2.5-VL Video Captioning](#qwen25-vl-video-captioning)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Configuration](#configuration)
+    - [Configuration Parameters](#configuration-parameters)
+      - [System Configuration](#system-configuration)
+      - [Model Configuration](#model-configuration)
+      - [Quantization Configuration](#quantization-configuration)
+      - [Generation Configuration](#generation-configuration)
+      - [Process Configuration](#process-configuration)
+      - [Video Processing Configuration](#video-processing-configuration)
+    - [Example Configuration Modification](#example-configuration-modification)
+  - [How to Run](#how-to-run)
+  - [Supported Video Formats](#supported-video-formats)
+  - [Acknowledgments](#acknowledgments)
+
 # Qwen2.5-VL Video Captioning
 This project uses the Qwen2.5-VL model to generate detailed captions for videos. It can process both individual video files and entire directories, with support for customizable frame rates, resolution, and output formats.
 
