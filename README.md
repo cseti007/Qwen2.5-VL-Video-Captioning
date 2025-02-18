@@ -79,7 +79,7 @@ pip install git+https://github.com/huggingface/transformers accelerate
 pip install torch torchvision
 
 # Install other dependencies
-pip install bitsandbytes
+pip install bitsandbytes wheel
 pip install flash-attn --no-build-isolation
 ```
 
