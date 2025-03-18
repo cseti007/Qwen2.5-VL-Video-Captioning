@@ -64,7 +64,7 @@ Please be extremely specific and detailed in your description. If you notice any
                                                 # Options: "float32", "float16", "bfloat16"
                                                 # bfloat16 offers good balance of precision/speed
 
-        "max_new_tokens": 512,                  # Maximum length of generated text
+        "max_new_tokens": 256,                  # Maximum length of generated text
                                                 # Higher values allow longer responses
                                                 # But increase memory usage and generation time
         "quantization": {
@@ -81,11 +81,11 @@ Please be extremely specific and detailed in your description. If you notice any
                                             # Common option: "nf4" for 4-bit normal float
                                             # Affects how weights are stored
 
-           "double_quant": False,             # Whether to use double quantization. Can be used only with 4bit quantization. bits = 4.
+           "double_quant": True,             # Whether to use double quantization. Can be used only with 4bit quantization. bits = 4.
                                             # True = additional memory savings
                                             # False = slightly better quality
 
-           "quant_type": "proxy"            # Quantization algorithm type
+           "quant_type": "nf4"            # Quantization algorithm type
                                            # "proxy" is recommended for stable performance can be used only with 8bit quantization. 
                                            # use nf4 or fp4 for 4bit
        },
@@ -158,8 +158,8 @@ Please be extremely specific and detailed in your description. If you notice any
        }
     },
     "process": {
-        "process_type": "VIDEO",         # Can be "VIDEO", "IMAGE", or "BOTH"
-        "fps": 8.0,                     # Frames per second for video processing
+        "process_type": "BOTH",         # Can be "VIDEO", "IMAGE", or "BOTH"
+        "fps": 1.0,                     # Frames per second for video processing
                                         # Controls how many frames to extract per second
                                         # Higher = more detailed analysis but more memory/processing time
                                         # Lower = faster processing but might miss details
@@ -167,9 +167,9 @@ Please be extremely specific and detailed in your description. If you notice any
                                         # 8.0 is a good balance between detail and performance
                                         # Formula: frames_extracted = video_length_seconds * fps
                                         # E.g.: 10 second video at 8 fps = 80 frames
-        "input_path": "/path/to/input",
-        "output_dir": "/path/to/output",
-        "output_format": "csv",         # Output format for captions
+        "input_path": "/workspace",
+        "output_dir": "/workspace",
+        "output_format": "individual",         # Output format for captions
                                         # Options: 
                                         # - "csv": Saves all captions in a single CSV file
                                         # - "individual": Creates separate .txt files for each caption
@@ -274,6 +274,8 @@ class QuantizationConfig:
     def validate(self):
         if self.enabled and self.bits not in {4, 8}:
             raise ValueError("Quantization bits must be either 4 or 8")
+        if self.enabled and self.bits == 4 and self.quant_type not in {"nf4", "fp4"}:
+            raise ValueError("For 4-bit quantization, quant_type must be either 'nf4' or 'fp4'")
 
 @dataclass
 class SystemConfig:
@@ -493,13 +495,12 @@ class MediaCaptioner:
                 llm_int8_threshold=6.0,
                 llm_int8_has_fp16_weight=False
             )
-        # 4-bit esetén ezeket használjuk
         elif quant.enabled and quant.bits == 4:
             return BitsAndBytesConfig(
                 load_in_4bit=True,
                 bnb_4bit_compute_dtype=getattr(torch, self.config.model.torch_dtype),
                 bnb_4bit_use_double_quant=quant.double_quant,
-                bnb_4bit_quant_type="nf4"  # nf4 vagy fp4 lehet
+                bnb_4bit_quant_type=quant.quant_type
             )
         else:
             return None
