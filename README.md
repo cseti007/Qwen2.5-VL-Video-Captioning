@@ -4,7 +4,7 @@ This repository contains two scripts that work together to generate and refine v
 
 **1. Video Captioning Script (Qwen2.5-vl-captioner_vX.py):**
 
-- Uses the Qwen2.5-VL (Vision-Language) model to generate detailed captions from video content
+- Uses the Qwen2.5-VL (Vision-Language) model to generate detailed captions from video or image content
 - Extracts frames at configurable rates for analysis
 - Outputs captions in either CSV format or individual text files
 
