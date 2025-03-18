@@ -2,7 +2,7 @@ Please note that I'm not a developer. I made these scripts with the help of LLMs
 
 This repository contains two scripts that work together to generate and refine video captions using the Qwen2.5 model family:
 
-**1. Video Captioning Script (Qwen2.5-vl-captioner.py):**
+**1. Video Captioning Script (Qwen2.5-vl-captioner_vX.py):**
 
 - Uses the Qwen2.5-VL (Vision-Language) model to generate detailed captions from video content
 - Extracts frames at configurable rates for analysis
@@ -39,6 +39,20 @@ This repository contains two scripts that work together to generate and refine v
 # Qwen2.5-VL Video Captioning
 This project uses the Qwen2.5-VL model to generate detailed captions for videos. It can process both individual video files and entire directories, with support for customizable frame rates, resolution, and output formats.
 
+## V2 is here
+I created the second version of the captioner script what provides the following new features
+- image captioning (or both image and video) besides the currently available video captioning
+```
+        "process_type": "IMAGE",         # Can be "VIDEO", "IMAGE", or "BOTH"
+```
+- can save individual txt files with the captions instead of csv
+```
+        "output_format": "individual",  # Output format for captions
+                                        # Options: 
+                                        # - "csv": Saves all captions in a single CSV file
+                                        # - "individual": Creates separate .txt files for each caption
+                                        #                 using video filename (e.g., video1.mp4 -> video1.txt)
+```
 ## Prerequisites
 
 - Python 3.8 or higher
