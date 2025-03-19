@@ -204,12 +204,12 @@ Please be extremely specific and detailed in your description. If you notice any
                                       # Higher = better quality but more memory
                                       # Maximum depends on GPU memory
 
-        # Optional explicit resizing
-        "resized_height": 112,    # Fixed frame height
+        # Optional explicit resizing BYPASSED AT THE MOMENT IN THE CODE SO USE MAX_PIXELS PARAMATERS TO ADJUST THE RESIZING
+        #"resized_height": 112,    # Fixed frame height
                                   # None = automatic sizing
                                   # Value must be multiple of 28
 
-        "resized_width": 112,     # Fixed frame width
+        #"resized_width": 112,     # Fixed frame width
                                   # None = automatic sizing
                                   # Value must be multiple of 28
 
