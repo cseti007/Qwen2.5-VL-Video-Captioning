@@ -57,22 +57,22 @@ Please be extremely specific and detailed in your description. If you notice any
         },
     "model": {
         "name": "Qwen/Qwen2.5-VL-7B-Instruct",
-        "device": "cuda",                       # Device to run the model on
+        "device": "cuda:0",                       # Device to run the model on
                                                 # Options: "cuda", "cpu", "mps"
                                                 # Use "cuda" for GPU acceleration
         "torch_dtype": "bfloat16",              # Model precision type
                                                 # Options: "float32", "float16", "bfloat16"
                                                 # bfloat16 offers good balance of precision/speed
 
-        "max_new_tokens": 256,                  # Maximum length of generated text
+        "max_new_tokens": 512,                  # Maximum length of generated text
                                                 # Higher values allow longer responses
                                                 # But increase memory usage and generation time
         "quantization": {
-           "enabled": True,                   # Whether to use quantization
+           "enabled": False,                   # Whether to use quantization
                                             # True = reduced memory usage but slightly lower quality
                                             # False = original model quality but more memory
 
-           "bits": 4,                        # Quantization precision
+           "bits": 8,                        # Quantization precision
                                             # Options: 4 or 8
                                             # 4 = more compression, lower quality
                                             # 8 = less compression, better quality
@@ -81,11 +81,11 @@ Please be extremely specific and detailed in your description. If you notice any
                                             # Common option: "nf4" for 4-bit normal float
                                             # Affects how weights are stored
 
-           "double_quant": True,             # Whether to use double quantization. Can be used only with 4bit quantization. bits = 4.
+           "double_quant": False,             # Whether to use double quantization. Can be used only with 4bit quantization. bits = 4.
                                             # True = additional memory savings
                                             # False = slightly better quality
 
-           "quant_type": "nf4"            # Quantization algorithm type
+           "quant_type": "proxy"            # Quantization algorithm type
                                            # "proxy" is recommended for stable performance can be used only with 8bit quantization. 
                                            # use nf4 or fp4 for 4bit
        },
@@ -148,7 +148,7 @@ Please be extremely specific and detailed in your description. If you notice any
                                            # None = no offloading
                                            # Specify path to enable offloading
 
-           "torch_compile": False,          # Whether to use torch.compile
+           "torch_compile": False,          # Whether to use torch.compile EXPERIMENTAL, MIGHT NOT WORK YET
                                            # Can speed up inference
                                            # But increases initial loading time
 
@@ -158,8 +158,8 @@ Please be extremely specific and detailed in your description. If you notice any
        }
     },
     "process": {
-        "process_type": "BOTH",         # Can be "VIDEO", "IMAGE", or "BOTH"
-        "fps": 1.0,                     # Frames per second for video processing
+        "process_type": "VIDEO",         # Can be "VIDEO", "IMAGE", or "BOTH"
+        "fps": 8.0,                     # Frames per second for video processing
                                         # Controls how many frames to extract per second
                                         # Higher = more detailed analysis but more memory/processing time
                                         # Lower = faster processing but might miss details
@@ -167,8 +167,8 @@ Please be extremely specific and detailed in your description. If you notice any
                                         # 8.0 is a good balance between detail and performance
                                         # Formula: frames_extracted = video_length_seconds * fps
                                         # E.g.: 10 second video at 8 fps = 80 frames
-        "input_path": "/workspace",
-        "output_dir": "/workspace",
+        "input_path": "/workspace/dataset",
+        "output_dir": "/workspace/dataset",
         "output_format": "individual",         # Output format for captions
                                         # Options: 
                                         # - "csv": Saves all captions in a single CSV file
@@ -205,11 +205,11 @@ Please be extremely specific and detailed in your description. If you notice any
                                       # Maximum depends on GPU memory
 
         # Optional explicit resizing
-        "resized_height": None,    # Fixed frame height
+        "resized_height": 112,    # Fixed frame height
                                   # None = automatic sizing
                                   # Value must be multiple of 28
 
-        "resized_width": None,     # Fixed frame width
+        "resized_width": 112,     # Fixed frame width
                                   # None = automatic sizing
                                   # Value must be multiple of 28
 
@@ -276,6 +276,8 @@ class QuantizationConfig:
             raise ValueError("Quantization bits must be either 4 or 8")
         if self.enabled and self.bits == 4 and self.quant_type not in {"nf4", "fp4"}:
             raise ValueError("For 4-bit quantization, quant_type must be either 'nf4' or 'fp4'")
+        if self.enabled and self.bits == 8 and self.quant_type != "proxy":
+            raise ValueError("For 8-bit quantization, quant_type should be 'proxy'")
 
 @dataclass
 class SystemConfig:
@@ -488,12 +490,12 @@ class MediaCaptioner:
         """Create quantization configuration."""
         quant = self.config.model.quantization
         
-        # Következetesen használjuk a 8-bit kvantizálást
+        # use quant_type for 8-bit
         if quant.enabled and quant.bits == 8:
             return BitsAndBytesConfig(
                 load_in_8bit=True,
                 llm_int8_threshold=6.0,
-                llm_int8_has_fp16_weight=False
+                llm_int8_has_fp16_weight=False,
             )
         elif quant.enabled and quant.bits == 4:
             return BitsAndBytesConfig(
@@ -549,8 +551,11 @@ class MediaCaptioner:
                         {"type": "text", "text": self.config.prompt.text},
                         {
                             "video": [str(path) for path in frame_paths],
-                            "total_pixels": 20480 * 28 * 28,
-                            "min_pixels": 16 * 28 * 28
+                            "total_pixels": self.config.video.max_pixels * len(frame_paths),
+                            "min_pixels": self.config.video.min_pixels,
+                            "max_pixels": self.config.video.max_pixels
+                            #"resized_height": self.config.video.resized_height,
+                            #"resized_width": self.config.video.resized_width
                         }
                     ]
                 })
@@ -559,7 +564,37 @@ class MediaCaptioner:
                     messages, tokenize=False, add_generation_prompt=True
                 )
                 
+                # Debug code to check frame dimensions after processing
                 image_inputs, video_inputs = process_vision_info(messages)
+                
+                # Debug video frame dimensions
+#                if video_inputs:
+#                    print("\n--- DEBUG: Video Frame Information ---")
+#                    
+#                    # Check the structure of video_inputs
+#                    print(f"Type of video_inputs: {type(video_inputs)}")
+#                    
+#                    if isinstance(video_inputs, list) and len(video_inputs) > 0:
+#                        first_video = video_inputs[0]
+#                        print(f"Type of first video: {type(first_video)}")
+#                        
+#                        if isinstance(first_video, list):
+#                            print(f"Number of frames in first video: {len(first_video)}")
+#                            
+#                            if len(first_video) > 0:
+#                                # Get the first frame to check dimensions
+#                                first_frame = first_video[0]
+#                                
+#                                if hasattr(first_frame, "width") and hasattr(first_frame, "height"):
+#                                    # PIL Image
+#                                    w, h = first_frame.width, first_frame.height
+#                                    actual_pixels = w * h
+#                                    print(f"First frame dimensions: {w}x{h}")
+#                                    print(f"Actual pixels per frame: {actual_pixels}")
+#                                    print(f"Configured max_pixels: {self.config.video.max_pixels}")
+#                                    print(f"Ratio of actual to configured: {actual_pixels / self.config.video.max_pixels:.2f}x")
+#                    
+#                    print("--- End of Debug Info ---\n")
                 
                 inputs = self.processor(
                     text=[text],
