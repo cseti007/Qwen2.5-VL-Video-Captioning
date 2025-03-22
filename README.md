@@ -1,3 +1,5 @@
+## Image captions possibility is added - see details below
+
 Please note that I'm not a developer. I made these scripts with the help of LLMs so please forgive me if I cannot help you with all of your technical problems.
 
 This repository contains two scripts that work together to generate and refine video captions using the Qwen2.5 model family:
