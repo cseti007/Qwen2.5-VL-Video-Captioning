@@ -18,9 +18,8 @@ This project utilizes the Qwen2.5-VL large vision-language model to analyze vide
   - [Configuration](#configuration)
   - [How to Run](#how-to-run)
   - [Supported Video Formats](#supported-video-formats)
-- [Qwen2.5 Caption Refining](#qwen25-caption-refining)
-  - [Prerequisites](#prerequisites-1)
-  - [Configuration](#configuration-1)
+- [Qwen2.5 Caption Refinement Tool](#qwen25-caption-refinement-tool)
+  - [How to run](#how-to-run-1)
   - [Acknowledgments](#acknowledgments)
 
 ## Components
@@ -101,47 +100,18 @@ python Qwen2.5-vl-captioner_v3.py --config captioning-config.toml
 - .avi
 - .mov
 
-# Qwen2.5 Caption Refining
-The other script is a caption refinement tool that processes automatically generated video captions. 
+# Qwen2.5 Caption Refinement Tool
+The refinement tool now also uses a TOML configuration file (default: ```refinement-config.toml```). Key configuration sections include:
+
 **NOTE:** This script works only with CSV files at the moment
-## Prerequisites
-Addition packages should be installed
+
+## How to run
 ```
-pip install pandas
+python qwen_video_captioner.py --config refinement-config.toml
+
 ```
-## Configuration
-In this script, configuration is handled through the Config dataclass at the top of the file. Here's how to configure it:
-1. File Configuration
-```
-INPUT_CSV: str = "/path/to/your/input/video_captions.csv"  # Input file path
-OUTPUT_CSV: str = "/path/to/your/output/video_captions_refined.csv"  # Output file path
-```
-2. Define Column Names
-```
-INPUT_COLUMN: str = "caption"  # Name of the column containing original captions
-OUTPUT_COLUMN: str = "qwen"    # Name of the column where refined captions will be saved
-```
-3. Setup the model
-```
-MODEL_NAME: str = "Qwen/Qwen2.5-7B-Instruct"  # Model to use
-MAX_TOKENS: int = 200  # Maximum length of generated text
-BATCH_SIZE: int = 1    # How many captions to process at once
-```
-4. Configure Memory Optimization
-```
-USE_QUANTIZATION: bool = True  # Enable model quantization to save memory
-QUANTIZATION_BITS: int = 8     # Use 8 or 4 bits (8 is better quality, 4 saves more memory)
-```
-6. Other Parameters
-```
-TEMPERATURE: float = 0.7  # Higher = more creative, lower = more focused
-TOP_P: float = 0.9       # Controls diversity of outputs
-```
-7. Configure System Prompt
-```
-SYSTEM_PROMPT = """You are an AI prompt engineer..."""
-```
-8. 
+
+
 ## Acknowledgments
 
 This project uses the [Qwen2.5-VL model](https://github.com/QwenLM/Qwen2.5-VL) developed by Alibaba Cloud.

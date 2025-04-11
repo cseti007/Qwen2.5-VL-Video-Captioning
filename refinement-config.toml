@@ -1,0 +1,91 @@
+# Qwen2.5 Caption Refinement Configuration
+
+#=============================================================================
+# File paths
+#=============================================================================
+[files]
+# Path to the input CSV file containing the original captions
+# This should point to the output from the video captioner
+input_csv = "/path/to/input_folder/video_captions.csv"
+
+# Path where the refined captions will be saved
+# The script will create this file if it doesn't exist, or append to it if it does
+output_csv = "/path/to/output_folder/video_captions_refined.csv"
+
+#=============================================================================
+# Column names
+#=============================================================================
+[columns]
+# Column in the input CSV that contains the captions to refine
+input_column = "caption"
+
+# Column in the output CSV where refined captions will be stored
+# If this column doesn't exist, it will be created
+output_column = "qwen2"
+
+#=============================================================================
+# Model configuration
+#=============================================================================
+[model]
+# Hugging Face model name/path to use
+# Other options:
+# - "Qwen/Qwen2.5-1.5B-Instruct" (smaller)
+# - "Qwen/Qwen2.5-72B-Instruct" (larger)
+name = "Qwen/Qwen2.5-7B-Instruct"
+
+# Maximum number of tokens to generate for each refined caption
+# Higher values allow longer outputs but use more resources
+max_tokens = 200
+
+#=============================================================================
+# Quantization settings
+#=============================================================================
+[model.quantization]
+# Whether to use quantization to reduce memory usage
+# Set to false for highest quality but more memory usage
+enabled = true
+
+# Precision for quantization (4 or 8 bits)
+# 4 bits: more compression, less memory, slightly lower quality
+# 8 bits: less compression, more memory, better quality
+bits = 8
+
+#=============================================================================
+# Generation settings
+#=============================================================================
+[generation]
+# Controls randomness in text generation (0.0 to 1.0)
+# Lower values (0.1-0.3): More consistent, less creative outputs
+# Higher values (0.7-0.9): More varied, creative outputs
+temperature = 0.7
+
+# Controls diversity via nucleus sampling (0.0 to 1.0)
+# Higher values include more low-probability tokens
+top_p = 0.9
+
+# Number of captions to process at once before saving
+# Higher values may be more efficient but use more memory
+batch_size = 1
+
+#=============================================================================
+# Prompt templates
+#=============================================================================
+[prompts]
+# System prompt that guides how the refinement is performed
+# This defines the specific instructions for caption enhancement
+system_prompt = '''
+You are an AI prompt engineer tasked with helping me modifying a list of automatically generated prompts.
+
+Keep the original text but only do the following modifications:
+- you responses should just be the prompt
+- Write continuously, don't use multiple paragraphs, make the text form one coherent whole
+- do not mention your task or the text itself
+- remove references to video such as "the video begins" or "the video features" etc., but keep those sentences meaningful
+- mention the clothing details of the characters
+- use only declarative sentences
+'''
+
+# Template for the user message that includes the caption to refine
+# {text} will be replaced with the actual caption
+# {max_tokens} will be replaced with the configured token limit
+user_prompt = "Could you enhance and refine the following text while maintaining its core meaning:\n\n{text}\n\nPlease limit the response to {max_tokens} tokens."
