@@ -106,7 +106,7 @@ The refinement tool now also uses a TOML configuration file (default: ```refinem
 
 ## How to run
 ```
-python qwen2.5_caption_refinement --config config/refinement-config.toml
+python qwen2.5_caption_refinement.py --config config/refinement-config.toml
 
 ```
 
