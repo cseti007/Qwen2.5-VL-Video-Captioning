@@ -92,7 +92,7 @@ Open ```config.toml``` and modify the Dconfiguration.
 
 3. Run the Script
 ```
-python Qwen2.5-vl-captioner_v3.py
+python Qwen2.5-vl-captioner_v3.py --config captioning-config.toml
 
 ```
 ## Supported Video Formats
