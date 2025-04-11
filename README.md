@@ -75,7 +75,7 @@ pip install flash-attn --no-build-isolation
 
 ## Configuration
 
-The captioner uses a TOML configuration file (```config.toml```) for all settings. See the comments in the file for detailed explanations of all parameters.
+The captioner uses a TOML configuration file (```captioning-config.toml```) for all settings. See the comments in the file for detailed explanations of all parameters.
 
 ## How to Run
 
@@ -88,7 +88,7 @@ venv\Scripts\activate
 source venv/bin/activate
 ```
 2. Configure Settings
-Open ```config.toml``` and modify the Dconfiguration.
+Open ```captioning-config.toml``` and modify the Dconfiguration.
 
 3. Run the Script
 ```
