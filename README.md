@@ -5,7 +5,7 @@ This project utilizes the Qwen2.5-VL large vision-language model to analyze vide
 
 **Updates**:
 - **11.04.2025:** TOML based configuration, bug fixes, added hugginface authentication
-- **19.03.2025:** Image captions possibility is added - see details below
+- **19.03.2025:** Image captions possibility is added
 
 
 ## Table of Contents
