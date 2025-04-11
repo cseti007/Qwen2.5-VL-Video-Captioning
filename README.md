@@ -4,9 +4,8 @@ Please note that I'm not a developer. I made these scripts with the help of LLMs
 This project utilizes the Qwen2.5-VL large vision-language model to analyze videos and images and generate detailed captions. The project also includes a caption refinement tool that uses Qwen2.5 LLM to enhance the initially generated captions.
 
 **Updates**:
-- **11.04.2025:** TOML based configuration, bug fixes, added hugginface authentication
+- **11.04.2025:** TOML based configuration for both scripts, bug fixes, added hugginface authentication
 - **19.03.2025:** Image captions possibility is added
-
 
 ## Table of Contents
 
@@ -91,7 +90,7 @@ Open ```captioning-config.toml``` and modify the Dconfiguration.
 
 3. Run the Script
 ```
-python Qwen2.5-vl-captioner_v3.py --config captioning-config.toml
+python Qwen2.5-vl-captioner_v3.py --config config/captioning-config.toml
 
 ```
 ## Supported Video Formats
@@ -107,7 +106,7 @@ The refinement tool now also uses a TOML configuration file (default: ```refinem
 
 ## How to run
 ```
-python qwen_video_captioner.py --config refinement-config.toml
+python qwen_video_captioner.py --config config/refinement-config.toml
 
 ```
 
