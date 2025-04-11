@@ -1,0 +1,300 @@
+# Qwen2.5-VL Video Captioning Configuration
+
+#=============================================================================
+# Processing configuration
+#=============================================================================
+[process]
+# Media type to process: "VIDEO", "IMAGE", or "BOTH"
+process_type = "VIDEO"
+
+# Frames per second to extract from videos
+# Higher values capture more detail but increase memory usage and processing time
+# Lower values process faster but might miss details
+# For most cases, values between 1-8 are recommended
+fps = 8.0
+
+# Path to the directory or file to process
+# For a directory, all supported media files will be processed
+# For a single file, only that file will be processed
+input_path = "/path/to/input_folder"
+
+# Directory where output files will be saved
+# Will be created if it doesn't exist
+output_dir = "/path/to/output/folder"
+
+# Format to save captions:
+# - "csv": All captions in a single CSV file (easier to manage many files)
+# - "individual": Each caption in a separate .txt file (easier to view individual results)
+output_format = "csv"
+
+# Filename for the CSV output (only used when output_format = "csv")
+output_file = "video_captions.csv"
+
+# Column separator for CSV output (common options: ",", "|", "\t")
+csv_delimiter = ","
+
+#=============================================================================
+# Image processing parameters
+#=============================================================================
+[image]
+# Minimum number of pixels per image (128 * 28 * 28 = 100352)
+# Sets the lower bound for image resizing
+# Lower values = faster processing but potential loss of detail
+min_pixels = 100352
+
+# Maximum number of pixels per image (768 * 28 * 28 = 602112)
+# Sets the upper bound for image resizing
+# Higher values = more detail but increased memory usage
+max_pixels = 602112
+
+# Fixed height for resizing images (must be a multiple of 28)
+# Leave empty ("") to allow automatic resizing based on min/max_pixels
+resized_height = ""
+
+# Fixed width for resizing images (must be a multiple of 28)
+# Leave empty ("") to allow automatic resizing based on min/max_pixels
+resized_width = ""
+
+#=============================================================================
+# Video processing parameters
+#=============================================================================
+[video]
+# Minimum number of frames to extract from a video
+# Should be at least 4 for meaningful video analysis
+min_frames = 4
+
+# Maximum number of frames to extract from a video
+# Limits memory usage for long videos
+# Consider your GPU memory when setting this
+max_frames = 768
+
+# Rounding factor for number of frames
+# Usually doesn't need to be changed
+frame_factor = 2
+
+# Minimum number of pixels per frame (128 * 28 * 28 = 100352)
+# Sets the lower bound for frame resizing
+min_pixels = 100352
+
+# Maximum number of pixels per frame (512 * 28 * 28 = 401408)
+# Sets the upper bound for frame resizing
+# Lower than image max_pixels to account for multiple frames
+max_pixels = 401408
+
+# Fixed height for resizing video frames (must be a multiple of 28)
+# Leave empty ("") to allow automatic resizing based on min/max_pixels
+resized_height = ""
+
+# Fixed width for resizing video frames (must be a multiple of 28)
+# Leave empty ("") to allow automatic resizing based on min/max_pixels
+resized_width = ""
+
+# Video reader backend
+# - "torchvision": More compatible but potentially slower
+# - "decord": Generally faster but may have compatibility issues
+video_reader_backend = "torchvision"
+
+# Start time in seconds for video processing
+# Leave empty ("") to start from the beginning
+video_start = ""
+
+# End time in seconds for video processing
+# Leave empty ("") to process until the end
+video_end = ""
+
+#=============================================================================
+# Model configuration
+#=============================================================================
+[model]
+# Model name/path to use from Hugging Face
+# Other options include:
+# - "Qwen/Qwen2.5-VL-1.5B-Instruct" (smaller, faster)
+# - "Qwen/Qwen2.5-VL-72B-Instruct" (larger, more capable)
+name = "Qwen/Qwen2.5-VL-7B-Instruct"
+
+# Device to run the model on
+# - "cuda:0": First GPU (recommended for speed)
+# - "cuda:1", "cuda:2", etc.: Specific GPU if you have multiple
+# - "cpu": CPU only (much slower)
+# - "mps": Apple Silicon GPU
+device = "cuda:0"
+
+# Precision type for model weights
+# - "bfloat16": Good balance between precision and memory (recommended)
+# - "float16": Slightly less precision, may be faster on some hardware
+# - "float32": Full precision, uses more memory
+torch_dtype = "bfloat16"
+
+# Maximum number of tokens (words) to generate for each caption
+# Higher values allow longer, more detailed captions
+# Lower values generate shorter, more concise captions
+max_new_tokens = 512
+
+#=============================================================================
+# Model quantization settings (reduces memory usage)
+#=============================================================================
+[model.quantization]
+# Whether to use quantization (reduces memory usage with slight quality impact)
+# Set to false for highest quality but requires more GPU memory
+enabled = true
+
+# Quantization precision
+# - 4: More compression, lower memory usage, slightly reduced quality
+# - 8: Less compression, higher memory usage, better quality
+bits = 4
+
+# Quantization format (typically "nf4" for 4-bit quantization)
+# Only used with 4-bit quantization
+format = "nf4"
+
+# Whether to use double quantization for additional memory savings
+# Only applicable when bits = 4
+double_quant = true
+
+# Quantization algorithm type
+# - "nf4": Normal float (recommended for 4-bit)
+# - "fp4": Float point (alternative for 4-bit)
+# - "proxy": Only usable with 8-bit quantization
+quant_type = "nf4"
+
+#=============================================================================
+# Text generation parameters (affects caption quality/style)
+#=============================================================================
+[model.generation]
+# Controls randomness in generation (0.0 to 1.0)
+# - Lower values (0.1-0.3): More focused, deterministic, consistent outputs
+# - Higher values (0.7-0.9): More creative, diverse, potentially less factual
+temperature = 0.3
+
+# Controls diversity via nucleus sampling (0.0 to 1.0)
+# Higher values include more low-probability tokens
+top_p = 0.9
+
+# Limits vocabulary to top k tokens for each position
+# Higher values allow more diverse word choices
+top_k = 50
+
+# Penalty for repeating tokens (> 1.0 reduces repetition)
+# Higher values discourage repeating the same words/phrases
+repetition_penalty = 1.2
+
+# Whether to use sampling strategies
+# - true: Uses temperature, top_p, top_k for more varied outputs
+# - false: Uses greedy decoding (always selects highest probability token)
+do_sample = true
+
+# Number of beams for beam search
+# Set to 1 when do_sample is true
+# Higher values search more thoroughly but are slower
+num_beams = 1
+
+# Random seed for reproducible generation
+# Use the same seed to get consistent outputs
+# Change or remove for different outputs each run
+seed = 424242
+
+#=============================================================================
+# System prompt configuration (instructions for the model)
+#=============================================================================
+[system]
+# System message that guides the model's behavior and output style
+# This prompt tells the model what role to adopt and how to format its answer
+prompt = "You are a professional video analyst. Please provide an analysis of this video by covering each of these aspects in your answer. Use only one paragraph. DO NOT separate your answer into topics."
+
+# Whether to use the default system prompt
+# - false: Use the custom prompt above
+# - true: Use model's built-in default prompt
+use_default = false
+
+#=============================================================================
+# User prompt configuration (what to ask the model)
+#=============================================================================
+[prompt]
+# Language for the prompt and generation
+# Common values: "en" (English), "zh" (Chinese), "fr" (French), etc.
+language = "en"
+
+# The actual prompt/instruction sent to the model
+# Detailed instructions on what aspects to analyze in the media
+text = '''
+1. **Main Content:**
+    * What is the primary focus of the scene?
+    * Who are the main characters visible?
+
+2. **Object and Character Details:**
+    * Don't refer to characters as 'individual', 'characters' and 'persons', instead always use their gender or refer to them with their gender.
+    * Describe the appearance in detail
+    * What notable objects are present?
+
+3. **Actions and Movement:**
+    * Describe ALL movements, no matter how subtle.
+    * Specify the exact type of movement (walking, running, etc.).
+    * Note the direction and speed of movements.
+
+4. **Background Elements:**
+    * Describe the setting and environment.
+    * Note any environmental changes.
+
+5. **Visual Style:**
+    * Describe the lighting and color palette.
+    * Note any special effects or visual treatments.
+    * What is the overall style of the video? (e.g., realistic, animated, artistic, documentary)
+
+6. **Camera Work:**
+    * Describe EVERY camera angle change.
+    * Note the distance from subjects (close-up, medium, wide shot).
+    * Describe any camera movements (pan, tilt, zoom).
+
+7. **Scene Transitions:**
+    * How does each shot transition to the next?
+    * Note any changes in perspective or viewing angle.
+
+Please be extremely specific and detailed in your description. If you notice any movement or changes, describe them explicitly.
+'''
+
+#=============================================================================
+# Model loading options
+#=============================================================================
+[model.loading]
+# Whether to trust remote code when loading models
+# Required for most Hugging Face models including Qwen
+trust_remote_code = true
+
+# Whether to use flash attention (faster attention implementation)
+# Requires compatible GPU (CUDA) and may not work on all hardware
+use_flash_attention = true
+
+# Specific model revision to use (e.g., commit hash or tag)
+# Leave empty ("") to use the latest version
+revision = ""
+
+# Whether to use KV cache for faster generation
+# Highly recommended to keep as true
+use_cache = true
+
+# Your Hugging Face API token for accessing gated models
+# Required for Qwen2.5-VL models (you must accept the license on HF)
+# Get your token at: https://huggingface.co/settings/tokens
+hf_token = "HF_Token"
+
+#=============================================================================
+# Memory management options
+#=============================================================================
+[model.memory]
+# Maximum memory usage per device
+# Leave empty ("") for no limit
+# Format for custom limit: {"cuda:0": "10GiB"}
+max_memory = ""
+
+# Folder for CPU offloading (for very large models)
+# Leave empty ("") for no offloading
+offload_folder = ""
+
+# Whether to use torch.compile (experimental)
+# Can speed up inference but increases initial loading time
+# May not work with all model configurations
+torch_compile = false
+
+# Whether to optimize for low CPU memory usage
+# Recommended to keep as true
+low_cpu_mem_usage = true
