@@ -1,9 +1,10 @@
 Please note that I'm not a developer. I made these scripts with the help of LLMs so please forgive me if I cannot help you with all of your technical problems.
 
 # Qwen2.5-VL Video and Image Captioner
-This project utilizes the Qwen2.5-VL large vision-language model to analyze videos and images and generate detailed captions. The project also includes a caption refinement tool that uses Qwen2.5 LLM to enhance the initially generated captions.
+This project utilizes the Qwen2.5-VL large vision-language model to analyze videos and images and generate detailed captions (Qwen2.5-vl-captioner_vX.py). The project also includes a caption refinement script (qwen2.5_caption_refinement.py) that uses Qwen2.5 LLM to enhance the initially generated captions.
 
 **Updates**:
+- **13.04.2025:** caption-refinement: added support to refine txt files. See details in config/refinement-config.toml
 - **11.04.2025:** TOML based configuration for both scripts, bug fixes, added hugginface authentication
 - **19.03.2025:** Image captions possibility is added
 
@@ -86,7 +87,7 @@ venv\Scripts\activate
 source venv/bin/activate
 ```
 2. Configure Settings
-Open ```captioning-config.toml``` and modify the Dconfiguration.
+Open ```captioning-config.toml``` and modify the configuration.
 
 3. Run the Script
 ```
@@ -100,9 +101,7 @@ python Qwen2.5-vl-captioner_v3.py --config config/captioning-config.toml
 - .mov
 
 # Qwen2.5 Caption Refinement Tool
-The refinement tool now also uses a TOML configuration file (default: ```refinement-config.toml```). Key configuration sections include:
-
-**NOTE:** This script works only with CSV files at the moment
+The refinement tool now also uses a TOML configuration file (default: ```refinement-config.toml```). See the comments in the file for detailed explanations of all parameters.
 
 ## How to run
 ```
