@@ -14,21 +14,21 @@ mode = "txt"
 [files]
 # Path to the input CSV file containing the original captions
 # This should point to the output from the video captioner
-input_csv = "/home/cseti/Data/Datasets/videos/Soul/raw/eval/captions/video_captions.csv"
+input_csv = "/path/to/video_captions.csv"
 
 # Path where the refined captions will be saved
 # The script will create this file if it doesn't exist, or append to it if it does
-output_csv = "/home/cseti/Data/Datasets/videos/Soul/raw/eval/captions/video_captions_refined.csv"
+output_csv = "/path/to/video_captions_refined.csv"
 
 #=============================================================================
 # Directory paths for text file processing
 #=============================================================================
 [directories]
 # Directory containing text files to process
-input_dir = "/home/cseti/Data/Datasets/videos/Soul/raw/eval/captions"
+input_dir = "/path/to/input_folder"
 
 # Directory where processed text files will be saved
-output_dir = "/home/cseti/Data/Datasets/videos/Soul/raw/eval/captions/refined"
+output_dir = "/path/to/output_folder/refined"
 
 #=============================================================================
 # Column names for CSV processing
